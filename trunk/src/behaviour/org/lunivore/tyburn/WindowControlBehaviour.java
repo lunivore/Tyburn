@@ -27,194 +27,250 @@ public class WindowControlBehaviour extends Behaviour {
     @Test
 	public void shouldClickAButtonOnAWindow() throws Exception {
 		checkForHeadless();
+		
+		// Given
 		WindowControl control = new WindowControl(AFrame.FRAME_NAME);
-        
+        AFrame frame = new AFrame();
+		frame.setName(AFrame.FRAME_NAME);
+		
+		JButton button = new JButton("Press Me!");
+		button.setName("a.button");
+		
+		ActionListener actionListener = mock(ActionListener.class);
+		
+		button.addActionListener((ActionListener)actionListener);    		
+		
+		frame.getContentPane().add(button);
+		frame.pack();
+		frame.setVisible(true);
+
+		// When
 		try {
-            AFrame frame = new AFrame();
-    		frame.setName(AFrame.FRAME_NAME);
-    		
-    		JButton button = new JButton("Press Me!");
-    		button.setName("a.button");
-    		
-    		ActionListener actionListener = mock(ActionListener.class);
-    		
-    		button.addActionListener((ActionListener)actionListener);    		
-    		
-    		frame.getContentPane().add(button);
-    		frame.pack();
-    		frame.setVisible(true);
-    		
-    		control.clickButton("a.button");
-    		
-    		verify(actionListener).actionPerformed(With.a(ActionEvent.class));
-    		
+			control.clickButton("a.button");    		
         } finally {
             control.closeWindow();
         }
+        
+        // Then
+        verify(actionListener).actionPerformed(With.a(ActionEvent.class));
 	}
 
     @Test
 	public void shouldEnterTextIntoTextComponents() throws Exception {
         checkForHeadless();
+        
+        // Given
         WindowControl control = new WindowControl(AFrame.FRAME_NAME);
-
+        AFrame frame = new AFrame();
+		
+		JTextComponent textField = new JTextField();
+		textField.setName("a.textfield");
+		
+		JTextComponent textArea = new JTextArea();
+		textArea.setName("b.textarea");
+		
+		frame.getContentPane().setLayout(new FlowLayout());
+		
+		frame.getContentPane().add(textField);
+		frame.getContentPane().add(textArea);
+		frame.pack();
+		frame.setVisible(true);
+		
+		// When
         try {
-            AFrame frame = new AFrame();
-    		
-    		JTextComponent textField = new JTextField();
-    		textField.setName("a.textfield");
-    		
-    		JTextComponent textArea = new JTextArea();
-    		textArea.setName("b.textarea");
-    		
-    		frame.getContentPane().setLayout(new FlowLayout());
-    		
-    		frame.getContentPane().add(textField);
-    		frame.getContentPane().add(textArea);
-    		frame.pack();
-    		
-    		
-    		frame.setVisible(true);
+
     		control.enterText("a.textfield", "Text1");
     		control.enterText("b.textarea", "Text2");
-    		
-    		ensureThat(textField.getText(), eq("Text1"));
-    		ensureThat(textArea.getText(), eq("Text2"));
-            
         } finally {
             control.closeWindow();
         }
+		
+        // Then
+		ensureThat(textField.getText(), eq("Text1"));
+		ensureThat(textArea.getText(), eq("Text2"));
 	}
     
     @Test
 	public void shouldEnterTextIntoAComboBox() throws Exception {
         checkForHeadless();
-        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         
+        // Given
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
+        AFrame frame = new AFrame();
+        
+        JComboBox comboBox = new JComboBox(new Object[] {"horse", "cow", "sheep"});
+        comboBox.setName("a.combobox");
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(comboBox);
+        frame.pack();
+        frame.setVisible(true);
+        
+        // When
         try {
-            AFrame frame = new AFrame();
-            
-            JComboBox comboBox = new JComboBox(new Object[] {"horse", "cow", "sheep"});
-            comboBox.setName("a.combobox");
-            frame.getContentPane().setLayout(new FlowLayout());
-            frame.getContentPane().add(comboBox);
-            frame.pack();
-            frame.setVisible(true);
             
             control.enterText("a.combobox", "cow");
-            
-            ensureThat(comboBox.getSelectedItem(), eq((Object)"cow"));
-            
         } finally {
             control.closeWindow();
         }
+        ensureThat(comboBox.getSelectedItem(), eq((Object)"cow"));
     }
 
     @Test
     public void shouldEnterTextIntoAnEditableComboBox() throws Exception {
         checkForHeadless();
-        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         
-        try {
-            AFrame frame = new AFrame();
-            
-            JComboBox comboBox = new JComboBox(new Object[] {"horse", "cow", "sheep"});
-            comboBox.setName("a.combobox");
-            comboBox.setEditable(true);
-            comboBox.setSelectedItem("horse");
-            frame.getContentPane().setLayout(new FlowLayout());
-            frame.getContentPane().add(comboBox);
-            frame.pack();
-            frame.setVisible(true);
+        // Given
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
 
+        AFrame frame = new AFrame();
+        JComboBox comboBox = new JComboBox(new Object[] {"horse", "cow", "sheep"});
+        comboBox.setName("a.combobox");
+        comboBox.setEditable(true);
+        comboBox.setSelectedItem("horse");
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(comboBox);
+        frame.pack();
+        frame.setVisible(true);
+        
+        // When
+        try {
             control.enterText("a.combobox", "cow");
-            
-            // Due to the different focusing behaviour of eg: macs, PCs, this could say
-            // "cow" or "cowhorse"
-            ensureThat(comboBox.getEditor().getItem().toString(), contains("cow"));
-            
         } finally {
             control.closeWindow();
         }
+        
+        // Then
+        // Due to the different focusing behaviour of eg: macs, PCs, this could say
+        // "cow" or "cowhorse"
+        ensureThat(comboBox.getEditor().getItem().toString(), contains("cow"));
     }
 
     @Test
     public void shouldFindComponent() throws ComponentFinderException, TimeoutException  {
 	    checkForHeadless();
+	    
+	    // Given
 	    WindowControl control = new WindowControl(AFrame.FRAME_NAME);
-        try {
 
-            AFrame frame = new AFrame();
-    		
-    		JPanel panel = new JPanel();
-    		panel.setName("a.panel");
-    		
-    		frame.getContentPane().add(panel);
-    		frame.setVisible(true);
-    		
-    		ensureThat(control.findComponent("a.panel"), eq((Component)panel));
+        AFrame frame = new AFrame();
+		
+		JPanel panel = new JPanel();
+		panel.setName("a.panel");
+		
+		frame.getContentPane().add(panel);
+		frame.setVisible(true);
+		Component found;
+		
+		// When
+        try {
+        	found = control.findComponent("a.panel");
         } finally {
             control.closeWindow();
         }
+        
+        // Then
+        ensureThat(found, eq((Component)panel));
 	}
 
     @Test
     public void shouldCloseWindows() throws TimeoutException {
         checkForHeadless();
+        
+        // Given
         WindowControl control = new WindowControl(AFrame.FRAME_NAME);
-
         AFrame frame = new AFrame();
         
+        // When
         control.closeWindow();
-        ensureThat(!frame.isShowing());
+        
+        // Then
+        ensureThat(!frame.isShowing());        
         frame.dispose();
     }
 
     @Test
     public void shouldSimulateKeyPressesForInputMap() throws TimeoutException {
         checkForHeadless();
+        
+        // Given
 		WindowControl control = new WindowControl(AFrame.FRAME_NAME);
-		
-        try {
-            AFrame frame = new AFrame();            
+        AFrame frame = new AFrame();            
+        Action action = mock(Action.class);
+        stub(action.isEnabled()).toReturn(true);
 
-            Action action = mock(Action.class);
-            stub(action.isEnabled()).toReturn(true);
-            
-            frame.contentPanel.getActionMap().put(AFrame.ACTION_KEY, (Action) action);
-            
+        frame.contentPanel.getActionMap().put(AFrame.ACTION_KEY, (Action) action);
+        
+        // When
+        try {
             control.pressKeychar(' ');
-            
-            verify(action).actionPerformed(With.an(ActionEvent.class));
         } finally {
             control.closeWindow();
         }
+        
+        // Then
+        verify(action).actionPerformed(With.an(ActionEvent.class));
     }
 
     @Test
     public void shouldSimulateKeyPressesForKeyListeners() throws TimeoutException {
         checkForHeadless();
+        
+        // Given
         WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         
-        try {
-            AFrame frame = new AFrame();
-            
-            CustomMatcher<KeyEvent> matchesSpaceKey = new CustomMatcher<KeyEvent>() {
-                public boolean matches(KeyEvent arg) {
-                    return ((KeyEvent)arg).getKeyCode() == KeyEvent.VK_SPACE ||
-                        ((KeyEvent)arg).getKeyChar() == ' ';
-                }
-            };
-            KeyListener keyListener = mock(KeyListener.class);
-            frame.contentPanel.addKeyListener((KeyListener) keyListener);    
-            
+        AFrame frame = new AFrame();
+        KeyListener keyListener = mock(KeyListener.class);
+        frame.contentPanel.addKeyListener((KeyListener) keyListener); 
+
+        // When
+        try {   
             control.pressKeychar(' ');
-            
-            verify(keyListener).keyReleased(With.argThat(matchesSpaceKey));
         } finally {
             control.closeWindow();
         }
+        
+        // Then
+        verify(keyListener).keyReleased(With.argThat(matchesTheSpaceKey()));
     }
+    
+    @Test
+    public void shouldSimulateKeyPressesWhenKeyHasNoChar() throws TimeoutException {
+        checkForHeadless();
+        
+        // Given
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
+        AFrame frame = new AFrame();
+
+        KeyListener keyListener = mock(KeyListener.class);
+        frame.contentPanel.addKeyListener((KeyListener) keyListener);   
+        
+        // When
+        try { 
+            control.pressKeycode(KeyEvent.VK_RIGHT);
+        } finally {
+            control.closeWindow();
+        }
+        
+        // Then
+        verify(keyListener).keyReleased(With.argThat(matchesTheRightArrow()));
+    }
+
+	private CustomMatcher<KeyEvent> matchesTheSpaceKey() {
+		return new CustomMatcher<KeyEvent>() {
+		    public boolean matches(KeyEvent arg) {
+		        return ((KeyEvent)arg).getKeyCode() == KeyEvent.VK_SPACE ||
+		            ((KeyEvent)arg).getKeyChar() == ' ';
+		    }
+		};
+	}
+
+	private CustomMatcher<KeyEvent> matchesTheRightArrow() {
+		return new CustomMatcher<KeyEvent>() {
+		    public boolean matches(KeyEvent arg) {
+		        return ((KeyEvent)arg).getKeyCode() == KeyEvent.VK_RIGHT;
+		    }
+		};
+	}
 
     private void checkForHeadless() {
         new HeadlessChecker().check();
