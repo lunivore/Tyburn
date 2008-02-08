@@ -23,7 +23,7 @@ public class QueueingKeyAdapter extends QueueingComponentListener<Component> imp
     }
     
     public void keyPressed(KeyEvent e) {
-    	// Wait for key to be released or typed
+        // Wait for key to be released or typed
     }
     
     public void keyReleased(KeyEvent e) {

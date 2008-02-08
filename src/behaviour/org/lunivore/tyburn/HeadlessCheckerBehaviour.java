@@ -33,8 +33,8 @@ public class HeadlessCheckerBehaviour extends Behaviour {
         headlessChecker.check();
     }
 
-	private void ensureThrowsHeadlessExceptionOnHeadless(final HeadlessChecker headlessChecker) throws Exception {
-		System.setProperty("java.awt.headless", "true");
+    private void ensureThrowsHeadlessExceptionOnHeadless(final HeadlessChecker headlessChecker) throws Exception {
+        System.setProperty("java.awt.headless", "true");
         try {
             headlessChecker.check();
             fail("Should have thrown headless exception");

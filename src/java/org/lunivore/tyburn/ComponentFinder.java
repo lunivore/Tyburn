@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class ComponentFinder {
 
-	public Component findExactComponent(Container container, ComponentFilter filter) throws ComponentFinderException {
+    public Component findExactComponent(Container container, ComponentFilter filter) throws ComponentFinderException {
         Component[] matchedComponents = findComponents(container, filter);
         if (matchedComponents.length == 0) {
             throw new ComponentFinderException("No matching component found");

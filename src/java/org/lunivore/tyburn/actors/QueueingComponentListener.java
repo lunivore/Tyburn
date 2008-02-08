@@ -29,7 +29,7 @@ public abstract class QueueingComponentListener<T extends Component> {
         try {
             holder.get(1000);
         } catch (TimeoutException e) {
-        	removeSelfFromComponent();
+            removeSelfFromComponent();
             throw new RuntimeException("Expected " + eventType + " on component " + component.getName() + " was not received");
         }
         holder.clear();

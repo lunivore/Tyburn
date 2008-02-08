@@ -60,9 +60,9 @@ public class FocuserBehaviour extends Behaviour {
     }
     
     public static class AFrame extends JFrame {
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		private static final String FRAME_NAME = "a.window";
+        private static final String FRAME_NAME = "a.window";
         
         private JPanel contentPanel = new JPanel();
         public AFrame() {

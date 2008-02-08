@@ -22,7 +22,7 @@ public class QueuedMiniHashMap<K, V> implements QueuedMiniMap<K, V> {
      * Constructs a map with a default timeout of 30 seconds.
      */
     public QueuedMiniHashMap() {
-    	this(new ClockedTimeouterFactory());
+        this(new ClockedTimeouterFactory());
     }
     
     /**
@@ -46,9 +46,9 @@ public class QueuedMiniHashMap<K, V> implements QueuedMiniMap<K, V> {
 
     public void put(K key, V value) {
         map.put(key, value);
-		synchronized(waitingPlace) {
-			waitingPlace.notifyAll();
-		}
+        synchronized(waitingPlace) {
+            waitingPlace.notifyAll();
+        }
     }
     
     public V get(K key) throws TimeoutException {
@@ -60,16 +60,16 @@ public class QueuedMiniHashMap<K, V> implements QueuedMiniMap<K, V> {
         timeouter.start(timeout);
         V value = map.get(key);
         synchronized(waitingPlace) {    
-			while (value == null) {
-					
-				timeouter.checkTime();
-			    try {
-			        waitingPlace.wait(timeouter.getTimeLeftIfAny());
-			    } catch (InterruptedException ie) {}
-				value = map.get(key);
-				
-			}
-		}
+            while (value == null) {
+                    
+                timeouter.checkTime();
+                try {
+                    waitingPlace.wait(timeouter.getTimeLeftIfAny());
+                } catch (InterruptedException ie) {}
+                value = map.get(key);
+                
+            }
+        }
         return value;
     }
 
