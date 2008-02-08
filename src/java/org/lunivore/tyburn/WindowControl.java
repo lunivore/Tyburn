@@ -15,7 +15,7 @@ import org.lunivore.tyburn.actors.WindowGrabber;
 import org.lunivore.tyburn.threaded.TimeoutException;
 
 
-public class WindowWrapper {
+public class WindowControl {
 
 	// Use of the WindowWrapper starts it grabbing windows ASAP.
 	private static final WindowGrabber grabber = new WindowGrabber();
@@ -32,11 +32,11 @@ public class WindowWrapper {
     private Focuser focuser;
 
 		
-	public WindowWrapper(String windowName) {
+	public WindowControl(String windowName) {
 		this(windowName, new ComponentFinder());
 	}
 	
-	public WindowWrapper(String windowName, ComponentFinder finder) {
+	public WindowControl(String windowName, ComponentFinder finder) {
 		new HeadlessChecker().check();
 		this.windowName = windowName;
 		this.finder = finder;

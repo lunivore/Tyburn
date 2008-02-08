@@ -22,12 +22,12 @@ import org.lunivore.tyburn.threaded.TimeoutException;
 import org.mockito.CustomMatcher;
 
 
-public class WindowWrapperBehaviour extends Behaviour {
+public class WindowControlBehaviour extends Behaviour {
 
     @Test
 	public void shouldClickAButtonOnAWindow() throws Exception {
 		checkForHeadless();
-		WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+		WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         
 		try {
             AFrame frame = new AFrame();
@@ -44,19 +44,19 @@ public class WindowWrapperBehaviour extends Behaviour {
     		frame.pack();
     		frame.setVisible(true);
     		
-    		wrapper.clickButton("a.button");
+    		control.clickButton("a.button");
     		
     		verify(actionListener).actionPerformed(With.a(ActionEvent.class));
     		
         } finally {
-            wrapper.closeWindow();
+            control.closeWindow();
         }
 	}
 
     @Test
 	public void shouldEnterTextIntoTextComponents() throws Exception {
         checkForHeadless();
-        WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
 
         try {
             AFrame frame = new AFrame();
@@ -75,21 +75,21 @@ public class WindowWrapperBehaviour extends Behaviour {
     		
     		
     		frame.setVisible(true);
-    		wrapper.enterText("a.textfield", "Text1");
-    		wrapper.enterText("b.textarea", "Text2");
+    		control.enterText("a.textfield", "Text1");
+    		control.enterText("b.textarea", "Text2");
     		
     		ensureThat(textField.getText(), eq("Text1"));
     		ensureThat(textArea.getText(), eq("Text2"));
             
         } finally {
-            wrapper.closeWindow();
+            control.closeWindow();
         }
 	}
     
     @Test
 	public void shouldEnterTextIntoAComboBox() throws Exception {
         checkForHeadless();
-        WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         
         try {
             AFrame frame = new AFrame();
@@ -101,19 +101,19 @@ public class WindowWrapperBehaviour extends Behaviour {
             frame.pack();
             frame.setVisible(true);
             
-            wrapper.enterText("a.combobox", "cow");
+            control.enterText("a.combobox", "cow");
             
             ensureThat(comboBox.getSelectedItem(), eq((Object)"cow"));
             
         } finally {
-            wrapper.closeWindow();
+            control.closeWindow();
         }
     }
 
     @Test
     public void shouldEnterTextIntoAnEditableComboBox() throws Exception {
         checkForHeadless();
-        WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         
         try {
             AFrame frame = new AFrame();
@@ -127,21 +127,21 @@ public class WindowWrapperBehaviour extends Behaviour {
             frame.pack();
             frame.setVisible(true);
 
-            wrapper.enterText("a.combobox", "cow");
+            control.enterText("a.combobox", "cow");
             
             // Due to the different focusing behaviour of eg: macs, PCs, this could say
             // "cow" or "cowhorse"
             ensureThat(comboBox.getEditor().getItem().toString(), contains("cow"));
             
         } finally {
-            wrapper.closeWindow();
+            control.closeWindow();
         }
     }
 
     @Test
     public void shouldFindComponent() throws ComponentFinderException, TimeoutException  {
 	    checkForHeadless();
-	    WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+	    WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         try {
 
             AFrame frame = new AFrame();
@@ -152,20 +152,20 @@ public class WindowWrapperBehaviour extends Behaviour {
     		frame.getContentPane().add(panel);
     		frame.setVisible(true);
     		
-    		ensureThat(wrapper.findComponent("a.panel"), eq((Component)panel));
+    		ensureThat(control.findComponent("a.panel"), eq((Component)panel));
         } finally {
-            wrapper.closeWindow();
+            control.closeWindow();
         }
 	}
 
     @Test
     public void shouldCloseWindows() throws TimeoutException {
         checkForHeadless();
-        WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
 
         AFrame frame = new AFrame();
         
-        wrapper.closeWindow();
+        control.closeWindow();
         ensureThat(!frame.isShowing());
         frame.dispose();
     }
@@ -173,7 +173,7 @@ public class WindowWrapperBehaviour extends Behaviour {
     @Test
     public void shouldSimulateKeyPressesForInputMap() throws TimeoutException {
         checkForHeadless();
-		WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+		WindowControl control = new WindowControl(AFrame.FRAME_NAME);
 		
         try {
             AFrame frame = new AFrame();            
@@ -183,18 +183,18 @@ public class WindowWrapperBehaviour extends Behaviour {
             
             frame.contentPanel.getActionMap().put(AFrame.ACTION_KEY, (Action) action);
             
-            wrapper.pressKeychar(' ');
+            control.pressKeychar(' ');
             
             verify(action).actionPerformed(With.an(ActionEvent.class));
         } finally {
-            wrapper.closeWindow();
+            control.closeWindow();
         }
     }
 
     @Test
     public void shouldSimulateKeyPressesForKeyListeners() throws TimeoutException {
         checkForHeadless();
-        WindowWrapper wrapper = new WindowWrapper(AFrame.FRAME_NAME);
+        WindowControl control = new WindowControl(AFrame.FRAME_NAME);
         
         try {
             AFrame frame = new AFrame();
@@ -208,11 +208,11 @@ public class WindowWrapperBehaviour extends Behaviour {
             KeyListener keyListener = mock(KeyListener.class);
             frame.contentPanel.addKeyListener((KeyListener) keyListener);    
             
-            wrapper.pressKeychar(' ');
+            control.pressKeychar(' ');
             
             verify(keyListener).keyReleased(With.argThat(matchesSpaceKey));
         } finally {
-            wrapper.closeWindow();
+            control.closeWindow();
         }
     }
 
