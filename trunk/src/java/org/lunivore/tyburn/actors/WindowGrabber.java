@@ -23,13 +23,13 @@ public class WindowGrabber {
     private AWTEventListener windowWatcher = new WindowWatcher();
     
     public WindowGrabber() {
-    	this(new QueuedMiniHashMap<String, Window>());
+        this(new QueuedMiniHashMap<String, Window>());
     }
     
     public WindowGrabber(QueuedMiniMap<String, Window> miniMap) {
         this.miniMap = miniMap;
         
-		Toolkit.getDefaultToolkit().addAWTEventListener(
+        Toolkit.getDefaultToolkit().addAWTEventListener(
                 windowWatcher, 
                 AWTEvent.WINDOW_EVENT_MASK);
     }
@@ -51,7 +51,7 @@ public class WindowGrabber {
             }
         }
 
-        private void handleWindowClosed(AWTEvent event) {        	
+        private void handleWindowClosed(AWTEvent event) {            
             Window window = (Window)event.getSource();
             miniMap.remove(window.getName());
         }

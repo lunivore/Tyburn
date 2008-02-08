@@ -17,68 +17,68 @@ import org.lunivore.tyburn.threaded.TimeoutException;
 
 public class WindowControl {
 
-	// Use of the WindowWrapper starts it grabbing windows ASAP.
-	private static final WindowGrabber grabber = new WindowGrabber();
+    // Use of the WindowWrapper starts it grabbing windows ASAP.
+    private static final WindowGrabber grabber = new WindowGrabber();
     
-	private final CharacterTyper typer;
+    private final CharacterTyper typer;
     private final ButtonClicker clicker;
-	
-	private final String windowName;
-	private final ComponentFinder finder;
-	private Window window;
+    
+    private final String windowName;
+    private final ComponentFinder finder;
+    private Window window;
 
-	private Idler idler;
+    private Idler idler;
 
     private Focuser focuser;
 
-		
-	public WindowControl(String windowName) {
-		this(windowName, new ComponentFinder());
-	}
-	
-	public WindowControl(String windowName, ComponentFinder finder) {
-		new HeadlessChecker().check();
-		this.windowName = windowName;
-		this.finder = finder;
-		idler = new Idler();
+        
+    public WindowControl(String windowName) {
+        this(windowName, new ComponentFinder());
+    }
+    
+    public WindowControl(String windowName, ComponentFinder finder) {
+        new HeadlessChecker().check();
+        this.windowName = windowName;
+        this.finder = finder;
+        idler = new Idler();
         typer = new CharacterTyper();
         clicker = new ButtonClicker();
         focuser = new Focuser();
-	}
+    }
 
-	public void closeWindow() throws TimeoutException {
-		getOpenWindow().dispose();
-		idler.waitForIdle();
-	}
-	
-	public void clickButton(String componentName) throws ComponentFinderException, TimeoutException {
-		AbstractButton button = (AbstractButton) finder.findExactComponent(
-				getOpenWindow(), new NamedComponentFilter(componentName));
+    public void closeWindow() throws TimeoutException {
+        getOpenWindow().dispose();
+        idler.waitForIdle();
+    }
+    
+    public void clickButton(String componentName) throws ComponentFinderException, TimeoutException {
+        AbstractButton button = (AbstractButton) finder.findExactComponent(
+                getOpenWindow(), new NamedComponentFilter(componentName));
         clicker.click(button);
 
-	}
+    }
 
-	public void enterText(String componentName, String text) throws ComponentFinderException, TimeoutException {
-		Component component = findComponent(componentName);
-		typer.typeIntoComponent(component, text);
-	}
-		
+    public void enterText(String componentName, String text) throws ComponentFinderException, TimeoutException {
+        Component component = findComponent(componentName);
+        typer.typeIntoComponent(component, text);
+    }
+        
 
-	public void typeIntoTextComponent(TextComponent component, String text) {
-		typer.typeIntoComponent(component, text);
-	}
+    public void typeIntoTextComponent(TextComponent component, String text) {
+        typer.typeIntoComponent(component, text);
+    }
     
     public void typeIntoJTextComponent(JTextComponent component, String text) {
-    	typer.typeIntoComponent(component, text);
+        typer.typeIntoComponent(component, text);
     }   
-	
+    
     /**
      * Use this for any key which doesn't have a corresponding character (eg: directional keys).
      * If the key has a character, listeners will not always detect this mimicry.
      */
-	public void pressKeycode(int keycode) throws TimeoutException {
-		typer.pressKeycode(getOpenWindow(), keycode);
-	}
+    public void pressKeycode(int keycode) throws TimeoutException {
+        typer.pressKeycode(getOpenWindow(), keycode);
+    }
 
     /**
      * Use this for any key which has a valid character associated with it, when it is being pressed
@@ -88,18 +88,18 @@ public class WindowControl {
         typer.pressKeychar(getOpenWindow(), key);
     }
     
-	public Component findComponent(String componentName) throws ComponentFinderException, TimeoutException {
-		return finder.findExactComponent(getOpenWindow(), new NamedComponentFilter(componentName));
-	}
-	
-	public Window getOpenWindow() throws TimeoutException {
-		if (window == null) {
-			idler.waitForIdle();
-			window = grabber.getWindow(windowName);
-		}
-		return window;
-	}
-	
+    public Component findComponent(String componentName) throws ComponentFinderException, TimeoutException {
+        return finder.findExactComponent(getOpenWindow(), new NamedComponentFilter(componentName));
+    }
+    
+    public Window getOpenWindow() throws TimeoutException {
+        if (window == null) {
+            idler.waitForIdle();
+            window = grabber.getWindow(windowName);
+        }
+        return window;
+    }
+    
 
 
 

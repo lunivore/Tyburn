@@ -36,15 +36,15 @@ public class ButtonClicker {
             eventOccurred(e);
         }
 
-		@Override
-		protected void addSelfToComponent() {
-			component.addActionListener(this);
-		}
+        @Override
+        protected void addSelfToComponent() {
+            component.addActionListener(this);
+        }
 
-		@Override
-		protected void removeSelfFromComponent() {
-			component.removeActionListener(this);
-		}
+        @Override
+        protected void removeSelfFromComponent() {
+            component.removeActionListener(this);
+        }
         
     }
 }

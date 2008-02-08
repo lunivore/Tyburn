@@ -67,7 +67,7 @@ public class CharacterTyper {
         queuer.waitForEvent();
     }
 
-	public void pressKeycode(Window window, int keycode) {
+    public void pressKeycode(Window window, int keycode) {
         QueueingKeyAdapter queuer = null;
         
         if(window instanceof JFrame) {
@@ -83,15 +83,15 @@ public class CharacterTyper {
         
         postKeycodeEvent(window, keycode);
         queuer.waitForEvent();
-	}
+    }
 
     private void postKeycodeEvent(Window window, int keycode) {
         sysQueue.postEvent(createKeyPressEvent(window, keycode, KeyEvent.KEY_PRESSED));
         sysQueue.postEvent(createKeyPressEvent(window, keycode, KeyEvent.KEY_RELEASED));  
         idler.waitForIdle();
-	}
+    }
 
-	private void postKeyEvent(final Component component, final char key) {
+    private void postKeyEvent(final Component component, final char key) {
         sysQueue.postEvent(createKeyPressEvent(component, key, KeyEvent.KEY_PRESSED));
         sysQueue.postEvent(createKeyPressEvent(component, key, KeyEvent.KEY_RELEASED));
         sysQueue.postEvent(createKeyPressEvent(component, key, KeyEvent.KEY_TYPED));    

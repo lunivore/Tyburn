@@ -8,7 +8,7 @@ import org.lunivore.tyburn.threaded.TimeoutException;
 
 public class QueuedObjectHolderBehaviour extends Behaviour {
     
-	@Test
+    @Test
     public void shouldReturnExistingObject() throws TimeoutException {
         QueuedObjectHolder<String> holder = new QueuedObjectHolder<String>(1000);
         holder.set("Frodo");

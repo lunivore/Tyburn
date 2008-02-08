@@ -16,9 +16,9 @@ import org.lunivore.tyburn.threaded.TimeoutException;
 
 public class WindowGrabberBehaviour extends Behaviour {
 
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Test
-	public void shouldGetAnyWindowFromMiniMap() throws TimeoutException {
+    public void shouldGetAnyWindowFromMiniMap() throws TimeoutException {
         checkForHeadless();
         QueuedMiniMap<String, Window> miniMap = mock(QueuedMiniMap.class);
         
@@ -32,7 +32,7 @@ public class WindowGrabberBehaviour extends Behaviour {
     
     @SuppressWarnings("unchecked")
     @Test
-	public void shouldAddNewWindowsToAndRemoveNewWindowsFromMiniMap() {
+    public void shouldAddNewWindowsToAndRemoveNewWindowsFromMiniMap() {
         checkForHeadless();
         QueuedMiniMap<String, Window> miniMap = mock(QueuedMiniMap.class);
         WindowGrabber grabber = new WindowGrabber(miniMap);
