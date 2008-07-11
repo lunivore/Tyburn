@@ -3,6 +3,8 @@ package org.lunivore.tyburn;
 import java.awt.Component;
 import java.awt.TextComponent;
 import java.awt.Window;
+import java.awt.color.ColorSpace;
+import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractButton;
 import javax.swing.text.JTextComponent;
@@ -107,6 +109,13 @@ public class WindowControl {
         focuser.requestFocusOn(getOpenWindow());
         idler.waitForIdle();
     }
+
+	public BufferedImage grabImageOf(String componentName) throws ComponentFinderException, TimeoutException {
+		Component component = findComponent(componentName);
+		BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), ColorSpace.TYPE_RGB);
+		component.paint(image.createGraphics());
+		return image;
+	}
     
 
 }

@@ -1,11 +1,18 @@
 package org.lunivore.tyburn;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -20,7 +27,6 @@ import javax.swing.text.JTextComponent;
 import org.junit.Test;
 import org.lunivore.tyburn.threaded.TimeoutException;
 import org.mockito.CustomMatcher;
-
 
 public class WindowControlBehaviour extends Behaviour {
 
@@ -233,6 +239,31 @@ public class WindowControlBehaviour extends Behaviour {
         verify(keyListener).keyReleased(With.argThat(matchesTheSpaceKey()));
     }
     
+    @SuppressWarnings("serial")
+	@Test
+    public void shouldGrabAnImageOfAComponent() throws Exception {
+    	WindowControl control = new WindowControl(AFrame.FRAME_NAME);
+    	JPanel myPanel = new JPanel() {
+    		@Override
+    		public void paint(Graphics g) {
+    			super.paint(g);
+    			g.setColor(Color.CYAN);
+    			g.fillRect(20, 20, 40, 40);
+    		}
+    	};
+    	myPanel.setName("My panel");
+    	myPanel.setPreferredSize(new Dimension(100, 120));
+    	myPanel.setBackground(Color.WHITE);
+		new AFrame(myPanel);
+    	
+		BufferedImage image = control.grabImageOf("My panel");
+		assertThat(image.getRGB(0, 0), equalTo(Color.WHITE.getRGB()));
+		assertThat(image.getRGB(30, 30), equalTo(Color.CYAN.getRGB()));
+		assertThat(image.getWidth(), equalTo(myPanel.getWidth()));
+		assertThat(image.getHeight(), equalTo(myPanel.getHeight()));
+		
+    }
+    
     @Test
     public void shouldSimulateKeyPressesWhenKeyHasNoChar() throws TimeoutException {
         checkForHeadless();
@@ -282,8 +313,12 @@ public class WindowControlBehaviour extends Behaviour {
         private static final String ACTION_KEY = "AFrame.action";
         
         
-        private JPanel contentPanel = new JPanel();
+        private JPanel contentPanel;
         public AFrame() {
+        	this(new JPanel());
+        }
+        
+        public AFrame(JPanel contentPanel) {
             setName(FRAME_NAME);
             setContentPane(contentPanel);
 
@@ -291,7 +326,7 @@ public class WindowControlBehaviour extends Behaviour {
             
             this.pack();
             this.setVisible(true);
-            
+            this.contentPanel = contentPanel;
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
     }
