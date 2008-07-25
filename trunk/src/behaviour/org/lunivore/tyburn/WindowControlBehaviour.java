@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Action;
@@ -285,8 +287,36 @@ public class WindowControlBehaviour extends Behaviour {
         // Then
         verify(keyListener).keyReleased(With.argThat(matchesTheRightArrow()));
     }
+    
+    @Test
+    public void shouldSimulateMouseClicks() throws Exception {
+    	checkForHeadless();
+    	
+    	// Given
+    	WindowControl control = new WindowControl(AFrame.FRAME_NAME);
+    	JPanel mousey = new JPanel();
+    	mousey.setName("mousey");
+    	new AFrame(mousey);
+    	
+    	MouseListener mouseListener = mock(MouseListener.class);
+    	mousey.addMouseListener(mouseListener);
+    	
+    	control.clickMouseOn("mousey", 10, 10);
+    	
+    	verify(mouseListener).mouseClicked(With.argThat(isAMouseEventAt(10, 10)));
+    }
 
-    private CustomMatcher<KeyEvent> matchesTheSpaceKey() {
+    private CustomMatcher<MouseEvent> isAMouseEventAt(final int x, final int y) {
+		return new CustomMatcher<MouseEvent>() {
+			@Override
+			public boolean matches(MouseEvent event) {
+				return event.getX() == x && event.getY() == y;
+			}
+			
+		};
+	}
+
+	private CustomMatcher<KeyEvent> matchesTheSpaceKey() {
         return new CustomMatcher<KeyEvent>() {
             public boolean matches(KeyEvent arg) {
                 return ((KeyEvent)arg).getKeyCode() == KeyEvent.VK_SPACE ||
