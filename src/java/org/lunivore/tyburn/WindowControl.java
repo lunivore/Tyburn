@@ -7,12 +7,14 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractButton;
+import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import org.lunivore.tyburn.actors.ButtonClicker;
 import org.lunivore.tyburn.actors.CharacterTyper;
 import org.lunivore.tyburn.actors.Focuser;
 import org.lunivore.tyburn.actors.Idler;
+import org.lunivore.tyburn.actors.MouseClicker;
 import org.lunivore.tyburn.actors.WindowGrabber;
 import org.lunivore.tyburn.threaded.TimeoutException;
 
@@ -23,7 +25,8 @@ public class WindowControl {
     private static final WindowGrabber grabber = new WindowGrabber();
     
     private final CharacterTyper typer;
-    private final ButtonClicker clicker;
+    private final ButtonClicker buttonClicker;
+    private final MouseClicker mouseClicker;
     
     private final String windowName;
     private final ComponentFinder finder;
@@ -44,7 +47,8 @@ public class WindowControl {
         this.finder = finder;
         idler = new Idler();
         typer = new CharacterTyper();
-        clicker = new ButtonClicker();
+        buttonClicker = new ButtonClicker();
+        mouseClicker = new MouseClicker();
         focuser = new Focuser();
     }
 
@@ -56,10 +60,14 @@ public class WindowControl {
     public void clickButton(String componentName) throws ComponentFinderException, TimeoutException {
         AbstractButton button = (AbstractButton) finder.findExactComponent(
                 getOpenWindow(), new NamedComponentFilter(componentName));
-        clicker.click(button);
-
+        buttonClicker.click(button);
     }
 
+	public void clickMouseOn(String componentName, int x, int y) throws ComponentFinderException, TimeoutException {
+		Component component = findComponent(componentName);
+		mouseClicker.click(component, x, y);
+	}
+    
     public void enterText(String componentName, String text) throws ComponentFinderException, TimeoutException {
         Component component = findComponent(componentName);
         typer.typeIntoComponent(component, text);
