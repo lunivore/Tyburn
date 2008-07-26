@@ -1,6 +1,7 @@
 package org.lunivore.tyburn;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.Matchers.argThat;
 import static org.junit.Assert.assertThat;
 
 import java.awt.Color;
@@ -26,9 +27,11 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.lunivore.tyburn.threaded.TimeoutException;
-import org.mockito.CustomMatcher;
 
 public class WindowControlBehaviour extends Behaviour {
 
@@ -60,7 +63,7 @@ public class WindowControlBehaviour extends Behaviour {
         }
         
         // Then
-        verify(actionListener).actionPerformed(With.a(ActionEvent.class));
+        verify(actionListener).actionPerformed((ActionEvent) argThat(isA(ActionEvent.class)));
     }
 
     @Test
@@ -216,7 +219,7 @@ public class WindowControlBehaviour extends Behaviour {
         }
         
         // Then
-        verify(action).actionPerformed(With.an(ActionEvent.class));
+        verify(action).actionPerformed((ActionEvent) argThat(isA(ActionEvent.class)));
     }
 
     @Test
@@ -238,7 +241,7 @@ public class WindowControlBehaviour extends Behaviour {
         }
         
         // Then
-        verify(keyListener).keyReleased(With.argThat(matchesTheSpaceKey()));
+        verify(keyListener).keyReleased(argThat(matchesTheSpaceKey()));
     }
     
     @SuppressWarnings("serial")
@@ -285,7 +288,7 @@ public class WindowControlBehaviour extends Behaviour {
         }
         
         // Then
-        verify(keyListener).keyReleased(With.argThat(matchesTheRightArrow()));
+        verify(keyListener).keyReleased(argThat(matchesTheRightArrow()));
     }
     
     @Test
@@ -303,33 +306,45 @@ public class WindowControlBehaviour extends Behaviour {
     	
     	control.clickMouseOn("mousey", 10, 10);
     	
-    	verify(mouseListener).mouseClicked(With.argThat(isAMouseEventAt(10, 10)));
+    	verify(mouseListener).mouseClicked(argThat(isAMouseEventAt(10, 10)));
     }
 
-    private CustomMatcher<MouseEvent> isAMouseEventAt(final int x, final int y) {
-		return new CustomMatcher<MouseEvent>() {
-			@Override
-			public boolean matches(MouseEvent event) {
+    private Matcher<MouseEvent> isAMouseEventAt(final int x, final int y) {
+		return new BaseMatcher<MouseEvent>() {
+			public boolean matches(Object obj) {
+				MouseEvent event = (MouseEvent) obj;
 				return event.getX() == x && event.getY() == y;
+			}
+
+			public void describeTo(Description desc) {
+				desc.appendText("a mouse event at " + x + ", " + y);
 			}
 			
 		};
 	}
 
-	private CustomMatcher<KeyEvent> matchesTheSpaceKey() {
-        return new CustomMatcher<KeyEvent>() {
-            public boolean matches(KeyEvent arg) {
+	private Matcher<KeyEvent> matchesTheSpaceKey() {
+        return new BaseMatcher<KeyEvent>() {
+            public boolean matches(Object arg) {
                 return ((KeyEvent)arg).getKeyCode() == KeyEvent.VK_SPACE ||
                     ((KeyEvent)arg).getKeyChar() == ' ';
             }
+
+			public void describeTo(Description desc) {
+				desc.appendText("a space key event");
+			}
         };
     }
 
-    private CustomMatcher<KeyEvent> matchesTheRightArrow() {
-        return new CustomMatcher<KeyEvent>() {
-            public boolean matches(KeyEvent arg) {
+    private BaseMatcher<KeyEvent> matchesTheRightArrow() {
+        return new BaseMatcher<KeyEvent>() {
+            public boolean matches(Object arg) {
                 return ((KeyEvent)arg).getKeyCode() == KeyEvent.VK_RIGHT;
             }
+
+			public void describeTo(Description desc) {
+				desc.appendText("a right key event");
+			}
         };
     }
 
