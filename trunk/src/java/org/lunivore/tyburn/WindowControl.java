@@ -7,7 +7,6 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 
 import javax.swing.AbstractButton;
-import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import org.lunivore.tyburn.actors.ButtonClicker;
