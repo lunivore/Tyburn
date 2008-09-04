@@ -231,7 +231,7 @@ public class WindowControlBehaviour extends Behaviour {
         
         AFrame frame = new AFrame();
         KeyListener keyListener = mock(KeyListener.class);
-        frame.contentPanel.addKeyListener((KeyListener) keyListener); 
+        frame.contentPanel.addKeyListener(keyListener); 
 
         // When
         try {   
@@ -278,7 +278,7 @@ public class WindowControlBehaviour extends Behaviour {
         AFrame frame = new AFrame();
 
         KeyListener keyListener = mock(KeyListener.class);
-        frame.contentPanel.addKeyListener((KeyListener) keyListener);   
+        frame.contentPanel.addKeyListener(keyListener);   
         
         // When
         try { 
