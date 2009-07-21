@@ -19,6 +19,7 @@ import org.lunivore.tyburn.threaded.TimeoutException;
 
 
 public class WindowControl {
+    public static final long DEFAULT_WINDOW_TIMEOUT = 30000;
 
     // Use of the WindowWrapper starts it grabbing windows ASAP.
     private static final WindowGrabber grabber = new WindowGrabber();
@@ -35,13 +36,20 @@ public class WindowControl {
 
     private Focuser focuser;
 
+	private final long timeout;
+
         
     public WindowControl(String windowName) {
-        this(windowName, new ComponentFinder());
+        this(windowName, DEFAULT_WINDOW_TIMEOUT);
     }
+
+    public WindowControl(String windowName, long timeout) {
+		this(windowName, new ComponentFinder(), timeout);
+	}
     
-    public WindowControl(String windowName, ComponentFinder finder) {
-        new HeadlessChecker().check();
+    public WindowControl(String windowName, ComponentFinder finder, long timeout) {
+        this.timeout = timeout;
+		new HeadlessChecker().check();
         this.windowName = windowName;
         this.finder = finder;
         idler = new Idler();
@@ -51,7 +59,7 @@ public class WindowControl {
         focuser = new Focuser();
     }
 
-    public void closeWindow() throws TimeoutException {
+	public void closeWindow() throws TimeoutException {
         getOpenWindow().dispose();
         idler.waitForIdle();
     }
@@ -104,7 +112,7 @@ public class WindowControl {
     public Window getOpenWindow() throws TimeoutException {
         if (window == null) {
             idler.waitForIdle();
-            window = grabber.getWindow(windowName);
+            window = grabber.getWindow(windowName, timeout);
         }
         return window;
     }
