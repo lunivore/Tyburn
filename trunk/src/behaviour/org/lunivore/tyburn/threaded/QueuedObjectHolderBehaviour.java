@@ -2,9 +2,6 @@ package org.lunivore.tyburn.threaded;
 
 import org.junit.Test;
 import org.lunivore.tyburn.Behaviour;
-import org.lunivore.tyburn.threaded.ClockedTimeouterFactory;
-import org.lunivore.tyburn.threaded.QueuedObjectHolder;
-import org.lunivore.tyburn.threaded.TimeoutException;
 
 public class QueuedObjectHolderBehaviour extends Behaviour {
     

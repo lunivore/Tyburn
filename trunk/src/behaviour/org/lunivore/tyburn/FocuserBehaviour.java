@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.junit.Test;
-import org.lunivore.tyburn.HeadlessChecker;
 import org.lunivore.tyburn.actors.Focuser;
 
 public class FocuserBehaviour extends Behaviour {

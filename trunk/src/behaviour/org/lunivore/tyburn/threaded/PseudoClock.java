@@ -1,6 +1,5 @@
 package org.lunivore.tyburn.threaded;
 
-import org.lunivore.tyburn.threaded.Clock;
 
 
 public class PseudoClock implements Clock {
