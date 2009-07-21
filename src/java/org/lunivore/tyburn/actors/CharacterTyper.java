@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import org.lunivore.tyburn.Speed;
 import org.lunivore.tyburn.listeners.QueueingKeyAdapter;
 import org.lunivore.tyburn.threaded.TimeoutException;
 
@@ -23,11 +24,13 @@ public class CharacterTyper {
     private EventQueue sysQueue;
     private Idler idler;
     private Focuser focuser;
+	private final Speed speed;
 
-    public CharacterTyper() {
-        sysQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
+    public CharacterTyper(Speed speed) {
+        this.speed = speed;
+		sysQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
         idler = new Idler();
-        focuser = new Focuser();
+        focuser = new Focuser(speed);
     }
     
     public void typeIntoComponent(Component component, String text) {
@@ -36,9 +39,9 @@ public class CharacterTyper {
         
         for (int i = 0; i < text.length(); i++) {
             if (component instanceof JComboBox && ((JComboBox) component).isEditable()) {
-                queuer = new QueueingKeyAdapter(((JComboBox) component).getEditor().getEditorComponent());
+                queuer = new QueueingKeyAdapter(((JComboBox) component).getEditor().getEditorComponent(), speed);
             } else {
-                queuer = new QueueingKeyAdapter(component);
+                queuer = new QueueingKeyAdapter(component, speed);
             }
             postKeyEvent(component, text.charAt(i));
             queuer.waitForEvent();
@@ -55,11 +58,11 @@ public class CharacterTyper {
         if(window instanceof JFrame) {
             Container contentPane = ((JFrame)window).getContentPane();
             if (contentPane instanceof JComponent) {
-                queuer = new QueueingKeyAdapter(contentPane);
+                queuer = new QueueingKeyAdapter(contentPane, speed);
                 focuser.requestFocusOn(contentPane);
             }
         } else {
-            queuer = new QueueingKeyAdapter(window.getFocusOwner());
+            queuer = new QueueingKeyAdapter(window.getFocusOwner(), speed);
             focuser.requestFocusOn(window.getFocusOwner());
         }
         
@@ -73,11 +76,11 @@ public class CharacterTyper {
         if(window instanceof JFrame) {
             Container contentPane = ((JFrame)window).getContentPane();
             if (contentPane instanceof JComponent) {
-                queuer = new QueueingKeyAdapter(contentPane);
+                queuer = new QueueingKeyAdapter(contentPane, speed);
                 focuser.requestFocusOn(contentPane);
             }
         } else {
-            queuer = new QueueingKeyAdapter(window.getFocusOwner());
+            queuer = new QueueingKeyAdapter(window.getFocusOwner(), speed);
             focuser.requestFocusOn(window.getFocusOwner());
         }
         

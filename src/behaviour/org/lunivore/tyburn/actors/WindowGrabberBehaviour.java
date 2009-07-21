@@ -12,12 +12,9 @@ import javax.swing.SwingUtilities;
 import org.junit.Test;
 import org.lunivore.tyburn.Behaviour;
 import org.lunivore.tyburn.HeadlessChecker;
-import org.lunivore.tyburn.WindowControl;
 import org.lunivore.tyburn.threaded.QueuedMiniHashMap;
 import org.lunivore.tyburn.threaded.QueuedMiniMap;
 import org.lunivore.tyburn.threaded.TimeoutException;
-
-
 
 public class WindowGrabberBehaviour extends Behaviour {
 

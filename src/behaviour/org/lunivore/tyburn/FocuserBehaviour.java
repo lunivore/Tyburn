@@ -14,7 +14,7 @@ public class FocuserBehaviour extends Behaviour {
     @Test
     public void shouldRequestFocusOnAComponent() {
         checkForHeadless();
-        Focuser focuser = new Focuser();
+        Focuser focuser = new Focuser(Speed.FLAT_OUT);
         AFrame frame = new AFrame();            
         
         try {
@@ -37,7 +37,7 @@ public class FocuserBehaviour extends Behaviour {
     @Test
     public void shouldNotChangeAnythingIfFocusAlreadyOnAComponent() {
         checkForHeadless();
-        Focuser focuser = new Focuser();
+        Focuser focuser = new Focuser(Speed.FLAT_OUT);
         AFrame frame = new AFrame();            
         
         try {

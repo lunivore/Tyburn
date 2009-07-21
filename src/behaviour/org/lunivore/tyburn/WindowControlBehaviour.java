@@ -319,6 +319,28 @@ public class WindowControlBehaviour extends Behaviour {
     }
     
     @Test
+    public void shouldHoldBackOnTheSpeed() throws Exception {
+    	checkForHeadless();
+    	
+    	// Given
+    	Speed speed = mock(Speed.class);
+		WindowControl control = new WindowControl(AFrame.FRAME_NAME, new ComponentFinder(), speed, 1000);
+    	JPanel mousey = new JPanel();
+    	mousey.setName("mousey");
+    	new AFrame(mousey);
+    	
+    	// When
+    	try {
+    		control.clickMouseOn("mousey", 10, 10);
+    	} finally {
+    		control.closeWindow();
+    	}
+    	
+    	// Then
+    	verify(speed).holdBack();
+    }
+    
+    @Test
     public void shouldTellMeIfAWindowHasBeenOpened() throws Exception {
     	checkForHeadless();
     	

@@ -5,18 +5,21 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractButton;
 
+import org.lunivore.tyburn.Speed;
 import org.lunivore.tyburn.threaded.TimeoutException;
 
 public class ButtonClicker {
     
     private Idler idler;
+	private final Speed speed;
 
-    public ButtonClicker() {
-        idler = new Idler();
+    public ButtonClicker(Speed speed) {
+        this.speed = speed;
+		idler = new Idler();
     }
     
     public void click(AbstractButton button) throws TimeoutException {
-        QueueingButtonClicker queuer = new QueueingButtonClicker(button);
+        QueueingButtonClicker queuer = new QueueingButtonClicker(button, speed);
         
         try {
             button.doClick(200);
@@ -28,8 +31,8 @@ public class ButtonClicker {
     }
 
     private class QueueingButtonClicker extends QueueingComponentListener<AbstractButton> implements ActionListener {
-        public QueueingButtonClicker(AbstractButton button) {
-            super(button, "button click");
+        public QueueingButtonClicker(AbstractButton button, Speed speed) {
+            super(button, "button click", speed);
         }
         
         public void actionPerformed(ActionEvent e) {
