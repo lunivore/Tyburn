@@ -26,7 +26,7 @@ public class ImageToAsciiGridConverterBehaviour {
 		graphics.fillRect(60, 80, 20, 20);
 		
 		// When
-		String asciiGrid = new ImageToAsciiGridConverter().convert(image, 20);
+		String asciiGrid = new ImageToAsciiGridConverter(ColorScheme.BLACK_ON_WHITE).convert(image, 20);
 		
 		// Then
 		assertThat(asciiGrid, equalTo(
@@ -38,7 +38,7 @@ public class ImageToAsciiGridConverterBehaviour {
 				));
 		
 		// When (half the scale)
-		asciiGrid = new ImageToAsciiGridConverter().convert(image, 10);
+		asciiGrid = new ImageToAsciiGridConverter(ColorScheme.BLACK_ON_WHITE).convert(image, 10);
 		
 		// Then
 		assertThat(asciiGrid, equalTo(

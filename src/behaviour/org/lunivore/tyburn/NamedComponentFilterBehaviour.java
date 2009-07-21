@@ -3,7 +3,6 @@ package org.lunivore.tyburn;
 import javax.swing.JButton;
 
 import org.junit.Test;
-import org.lunivore.tyburn.NamedComponentFilter;
 
 
 

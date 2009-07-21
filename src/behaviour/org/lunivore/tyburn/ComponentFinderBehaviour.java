@@ -10,10 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.junit.Test;
-import org.lunivore.tyburn.ComponentFilter;
-import org.lunivore.tyburn.ComponentFinder;
-import org.lunivore.tyburn.ComponentFinderException;
-import org.lunivore.tyburn.HeadlessChecker;
 
 
 public class ComponentFinderBehaviour extends Behaviour {

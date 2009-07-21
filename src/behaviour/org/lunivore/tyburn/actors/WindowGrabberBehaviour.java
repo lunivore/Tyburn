@@ -1,7 +1,9 @@
 package org.lunivore.tyburn.actors;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Window;
 
 import javax.swing.JFrame;
@@ -10,7 +12,6 @@ import javax.swing.SwingUtilities;
 import org.junit.Test;
 import org.lunivore.tyburn.Behaviour;
 import org.lunivore.tyburn.HeadlessChecker;
-import org.lunivore.tyburn.actors.WindowGrabber;
 import org.lunivore.tyburn.threaded.QueuedMiniHashMap;
 import org.lunivore.tyburn.threaded.QueuedMiniMap;
 import org.lunivore.tyburn.threaded.TimeoutException;
