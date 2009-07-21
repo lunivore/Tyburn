@@ -18,7 +18,6 @@ import org.lunivore.tyburn.threaded.TimeoutException;
  * each key calculated in this way will be stored.
  */
 public class WindowGrabber {
-    public static final long DEFAULT_WINDOW_TIMEOUT = 30000;
     private QueuedMiniMap<String, Window> miniMap;
     private AWTEventListener windowWatcher = new WindowWatcher();
     
@@ -34,8 +33,8 @@ public class WindowGrabber {
                 AWTEvent.WINDOW_EVENT_MASK);
     }
 
-    public Window getWindow(String title) throws TimeoutException {
-        return (Window)miniMap.get(title, DEFAULT_WINDOW_TIMEOUT);
+    public Window getWindow(String title, long timeout) throws TimeoutException {
+        return (Window)miniMap.get(title, timeout);
     }
     
     public void dispose() {
