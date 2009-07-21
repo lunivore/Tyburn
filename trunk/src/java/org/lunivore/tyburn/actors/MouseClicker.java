@@ -6,13 +6,17 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import org.lunivore.tyburn.Speed;
+
 public class MouseClicker {
 
     private Idler idler;
 	private EventQueue sysQueue;
+	private final Speed speed;
 
-    public MouseClicker() {
-        idler = new Idler();
+    public MouseClicker(Speed speed) {
+        this.speed = speed;
+		idler = new Idler();
         sysQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
     }
     
@@ -32,7 +36,7 @@ public class MouseClicker {
 
     private class QueueingMouseClicker extends QueueingComponentListener<Component> implements MouseListener {
         public QueueingMouseClicker(Component component) {
-            super(component, "mouse click");
+            super(component, "mouse click", speed);
         }
         
         public void mouseClicked(MouseEvent e) {

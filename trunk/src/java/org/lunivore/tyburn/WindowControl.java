@@ -38,25 +38,24 @@ public class WindowControl {
 
 	private final long timeout;
 
-        
     public WindowControl(String windowName) {
         this(windowName, DEFAULT_WINDOW_TIMEOUT);
     }
 
     public WindowControl(String windowName, long timeout) {
-		this(windowName, new ComponentFinder(), timeout);
+		this(windowName, new ComponentFinder(), new PropertyDrivenSpeed(), timeout);
 	}
     
-    public WindowControl(String windowName, ComponentFinder finder, long timeout) {
-        this.timeout = timeout;
+    public WindowControl(String windowName, ComponentFinder finder, Speed speed, long timeout) {
+		this.timeout = timeout;
 		new HeadlessChecker().check();
         this.windowName = windowName;
         this.finder = finder;
         idler = new Idler();
-        typer = new CharacterTyper();
-        buttonClicker = new ButtonClicker();
-        mouseClicker = new MouseClicker();
-        focuser = new Focuser();
+        typer = new CharacterTyper(speed);
+        buttonClicker = new ButtonClicker(speed);
+        mouseClicker = new MouseClicker(speed);
+        focuser = new Focuser(speed);
     }
 
 	public void closeWindow() throws TimeoutException {
@@ -117,9 +116,6 @@ public class WindowControl {
         return window;
     }
     
-
-
-
     public void requestWindowFocus() throws TimeoutException {
         focuser.requestFocusOn(getOpenWindow());
         idler.waitForIdle();

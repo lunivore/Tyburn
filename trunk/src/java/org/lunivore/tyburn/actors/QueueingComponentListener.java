@@ -3,6 +3,7 @@ package org.lunivore.tyburn.actors;
 import java.awt.AWTEvent;
 import java.awt.Component;
 
+import org.lunivore.tyburn.Speed;
 import org.lunivore.tyburn.threaded.QueuedObjectHolder;
 import org.lunivore.tyburn.threaded.TimeoutException;
 
@@ -13,15 +14,17 @@ import org.lunivore.tyburn.threaded.TimeoutException;
  * subclass; see 
  */
 public abstract class QueueingComponentListener<T extends Component> {
-
-    private QueuedObjectHolder<AWTEvent> holder = new QueuedObjectHolder<AWTEvent>();
+    
+	private QueuedObjectHolder<AWTEvent> holder = new QueuedObjectHolder<AWTEvent>();
     private Idler idler = new Idler();
     protected final T component;
     private String eventType;
+	private final Speed speed;
 
-    public QueueingComponentListener(T component, String eventType) {
+    public QueueingComponentListener(T component, String eventType, Speed speed) {
         this.component = component;
         this.eventType = eventType;
+		this.speed = speed;
         addSelfToComponent();
     }
 
@@ -35,6 +38,7 @@ public abstract class QueueingComponentListener<T extends Component> {
         holder.clear();
         removeSelfFromComponent();
         idler.waitForIdle();
+        speed.holdBack();
     }
 
     protected abstract void addSelfToComponent();

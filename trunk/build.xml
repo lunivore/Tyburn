@@ -1,6 +1,6 @@
 <project name="tyburn" default="verified-build" basedir=".">
 	<property name="project" value="tyburn" />
-	<property name="version" value="1.0" />
+	<property name="version" value="1.1" />
 	<property name="java.src" location = "src/java" />
 	<property name="java.classes" location="working_dir/java" />
 	<property name="test.src" location="src/behaviour" />

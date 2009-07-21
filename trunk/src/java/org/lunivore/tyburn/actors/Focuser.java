@@ -4,12 +4,20 @@ import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import org.lunivore.tyburn.Speed;
+
 
 public class Focuser {
 
-    public void requestFocusOn(Component component) {
+    private final Speed speed;
+
+    public Focuser(Speed speed) {
+		this.speed = speed;
+	}
+    
+	public void requestFocusOn(Component component) {
         if (!component.hasFocus()) {
-            QueueingFocusListener focusListener = new QueueingFocusListener(component);
+            QueueingFocusListener focusListener = new QueueingFocusListener(component, speed);
             component.requestFocus();
             focusListener.waitForEvent();
         }
@@ -17,8 +25,8 @@ public class Focuser {
 
     private class QueueingFocusListener extends QueueingComponentListener<Component> implements FocusListener {
         
-        public QueueingFocusListener(Component component) {
-            super(component, "FocusEvent");
+        public QueueingFocusListener(Component component, Speed speed) {
+            super(component, "FocusEvent", speed);
         }
         
         public void focusGained(FocusEvent e) {
