@@ -75,5 +75,9 @@ public class QueuedMiniHashMap<K, V> implements QueuedMiniMap<K, V> {
 
     public void remove(K key) {
         map.remove(key);
-    }    
+    }
+
+	public boolean has(K key) {
+		return map.containsKey(key);
+	}    
 }

@@ -1,5 +1,7 @@
 package org.lunivore.tyburn.threaded;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.lunivore.tyburn.Behaviour;
 
@@ -15,6 +17,17 @@ public class QueuedMiniHashMapBehaviour extends Behaviour {
         
         queuedMiniMap.put("F", "Frodo");
         ensureThat(queuedMiniMap.get("F", 100), eq("Frodo"));
+    }
+    
+    @Test
+    public void shouldTellMeIfItHasAnObjectMatchingTheKeyYet() {
+        QueuedMiniHashMap<String, String> queuedMiniMap = new QueuedMiniHashMap<String, String>(new ClockedTimeouterFactory(clock));
+        
+        assertFalse(queuedMiniMap.has("F"));
+        
+        queuedMiniMap.put("F", "Frodo");
+        
+        assertTrue(queuedMiniMap.has("F"));
     }
     
     @Test
