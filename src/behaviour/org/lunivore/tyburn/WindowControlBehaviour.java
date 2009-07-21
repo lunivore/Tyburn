@@ -1,8 +1,10 @@
 package org.lunivore.tyburn;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.Matchers.argThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.argThat;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -31,6 +33,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.lunivore.tyburn.actors.Idler;
 import org.lunivore.tyburn.threaded.TimeoutException;
 
 public class WindowControlBehaviour extends Behaviour {
@@ -304,9 +307,35 @@ public class WindowControlBehaviour extends Behaviour {
     	MouseListener mouseListener = mock(MouseListener.class);
     	mousey.addMouseListener(mouseListener);
     	
-    	control.clickMouseOn("mousey", 10, 10);
+    	// When
+    	try {
+    		control.clickMouseOn("mousey", 10, 10);
+    	} finally {
+    		control.closeWindow();
+    	}
     	
+    	// Then
     	verify(mouseListener).mouseClicked(argThat(isAMouseEventAt(10, 10)));
+    }
+    
+    @Test
+    public void shouldTellMeIfAWindowHasBeenOpened() throws Exception {
+    	checkForHeadless();
+    	
+    	// Given
+    	WindowControl control = new WindowControl(AFrame.FRAME_NAME);
+    	
+    	// Then
+    	assertFalse(control.hasFoundOpenWindow());
+    	
+    	// When
+    	new AFrame();
+    	new Idler().waitForIdle();
+    	
+    	// Then
+    	assertTrue(control.hasFoundOpenWindow());
+    	
+    	control.closeWindow();
     }
 
     private Matcher<MouseEvent> isAMouseEventAt(final int x, final int y) {

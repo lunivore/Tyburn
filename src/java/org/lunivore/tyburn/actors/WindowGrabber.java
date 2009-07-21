@@ -60,5 +60,9 @@ public class WindowGrabber {
             Window window = (Window)event.getSource();
             miniMap.put(window.getName(), window);
         }    
-    };
+    }
+
+	public boolean hasFoundOpenWindow(String windowName) {
+		return miniMap.has(windowName);
+	};
 }

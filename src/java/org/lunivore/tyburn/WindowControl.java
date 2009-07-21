@@ -123,6 +123,10 @@ public class WindowControl {
 		component.paint(image.createGraphics());
 		return image;
 	}
+
+	public boolean hasFoundOpenWindow() {
+		return grabber.hasFoundOpenWindow(windowName);
+	}
     
 
 }

@@ -1,5 +1,7 @@
 package org.lunivore.tyburn.actors;
 
+
+import static org.junit.Assert.*;
 import java.awt.Window;
 
 import javax.swing.JFrame;
@@ -9,6 +11,7 @@ import org.junit.Test;
 import org.lunivore.tyburn.Behaviour;
 import org.lunivore.tyburn.HeadlessChecker;
 import org.lunivore.tyburn.actors.WindowGrabber;
+import org.lunivore.tyburn.threaded.QueuedMiniHashMap;
 import org.lunivore.tyburn.threaded.QueuedMiniMap;
 import org.lunivore.tyburn.threaded.TimeoutException;
 
@@ -46,6 +49,24 @@ public class WindowGrabberBehaviour extends Behaviour {
 
         verify(miniMap).put("frame.name", frame);
         verify(miniMap).remove("frame.name");
+    }
+    
+    @Test
+    public void shouldTellMeIfItHasFoundAnOpenWindowYet() {
+        checkForHeadless();
+        WindowGrabber grabber = new WindowGrabber(new QueuedMiniHashMap<String, Window>());
+        
+        JFrame frame = new JFrame();
+        frame.setName("frame.name");
+        
+        assertFalse(grabber.hasFoundOpenWindow("frame.name"));
+        
+        frame.setVisible(true);
+        waitForIdle();
+        
+        assertTrue(grabber.hasFoundOpenWindow("frame.name"));
+        
+        grabber.dispose();
     }
     
     private void waitForIdle() {
